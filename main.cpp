@@ -147,16 +147,16 @@ class Image
     }
 };
 
-void run(int width, int height, int initialGrains)
+void run(int width, int height, unsigned int initialGrains, int imgnum)
 {
-    int width = 1000;
-    int height = 1000;
+    // int width = 1000;
+    // int height = 1000;
     cGrid grid{width, height};
     Image img{width, height};
 
     int mx = width / 2;
     int my = height / 2;
-    int initialGrains = 1000000;
+    // int initialGrains = 1000000;
     grid.set(mx, my, initialGrains);
 
     bool changed = true;
@@ -188,50 +188,26 @@ void run(int width, int height, int initialGrains)
             img.setPixel(x, y, grid.get(x, y));
         }
     }
-    img.saveImage(1, initialGrains);
+    img.saveImage(imgnum, initialGrains);
 }
 
 int main(int argc, char **argv)
 {
 
-    int width = 1000;
-    int height = 1000;
-    cGrid grid{width, height};
-    Image img{width, height};
+    int width = 1024;
+    int height = 1024;
 
-    int mx = width / 2;
-    int my = height / 2;
-    int initialGrains = 1000000;
-    grid.set(mx, my, initialGrains);
+    // run(width, height, 64000, 0);
 
-    bool changed = true;
-
-    while (changed)
+    for (int i = 16; i < 32; i++)
     {
-        changed = false;
-        for (int y = 0; y < height; y++)
-        {
-            for (int x = 0; x < width; x++)
-            {
-                unsigned int v = grid.get(x, y);
-                if (v >= 4)
-                {
-                    grid.set(x, y, v - 4);
-                    grid.set(x + 1, y, grid.get(x + 1, y) + 1);
-                    grid.set(x - 1, y, grid.get(x - 1, y) + 1);
-                    grid.set(x, y + 1, grid.get(x, y + 1) + 1);
-                    grid.set(x, y - 1, grid.get(x, y - 1) + 1);
-                    changed = true;
-                }
-            }
-        }
+        cout << "Starting " << i << " " << flush;
+        time_t start = time(NULL);
+        unsigned int ig = 1 << i;
+        run(width, height, ig, i);
+        time_t end = time(NULL);
+        cout << "Time: " << end - start << " seconds"
+             << " for " << ig << endl
+             << flush;
     }
-    for (int y = 0; y < height; y++)
-    {
-        for (int x = 0; x < width; x++)
-        {
-            img.setPixel(x, y, grid.get(x, y));
-        }
-    }
-    img.saveImage(1, initialGrains);
 }

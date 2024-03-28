@@ -23,4 +23,4 @@ binary: $(OBJECTS)
 
 clean:
 	rm $(OBJECTS) 
-	rm bin/sandpiles-c
+	rm bin/*
