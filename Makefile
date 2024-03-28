@@ -1,0 +1,26 @@
+CC = g++ -std=c++17 -lstdc++fs
+CFLAGS = -I/usr/local/include/ -I/usr/include/
+CFLAGS += -Wall -Wextra -Wpedantic \
+          -Wformat=2 -Wno-unused-parameter -Wshadow \
+          -Wwrite-strings -Wredundant-decls -Wmissing-include-dirs
+CFLAGS += -O2
+LDFLAGS = -L/usr/local/lib/ -L/usr/lib/x86_64-linux-gnu/ -lgd -lm 
+OBJECTS = main.o 
+
+# GCC warnings that Clang doesn't provide:
+ifeq ($(CC),gcc)
+    CFLAGS += -Wjump-misses-init -Wlogical-op
+endif
+
+
+all: binary
+
+main.o : main.cpp
+	$(CC) $(CFLAGS) -c main.cpp -o main.o
+
+binary: $(OBJECTS)
+	$(CC) $(CFLAGS) $(OBJECTS) -o bin/sandpiles-c++ $(LDFLAGS)
+
+clean:
+	rm $(OBJECTS) 
+	rm bin/sandpiles-c

@@ -1,0 +1,6 @@
+bin/*
+!bin/*.md
+img/*
+!img/*.md
+*.o
+
