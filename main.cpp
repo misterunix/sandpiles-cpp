@@ -199,7 +199,7 @@ int main(int argc, char **argv)
 
     // run(width, height, 64000, 0);
 
-    for (int i = 16; i < 32; i++)
+    for (int i = 17; i < 32; i++)
     {
         cout << "Starting " << i << " " << flush;
         time_t start = time(NULL);

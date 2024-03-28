@@ -3,4 +3,5 @@ bin/*
 img/*
 !img/*.md
 *.o
-
+html/*
+*.doxy
