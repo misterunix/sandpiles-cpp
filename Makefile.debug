@@ -19,7 +19,7 @@ main.o : main.cpp
 	$(CC) $(CFLAGS) -c main.cpp -o main.o
 
 binary: $(OBJECTS)
-	$(CC) $(CFLAGS) $(OBJECTS) -o bin/sandpiles-debug-c++ $(LDFLAGS)
+	$(CC) $(CFLAGS) $(OBJECTS) -o bin/sandpiles-debug-cpp $(LDFLAGS)
 
 clean:
 	rm $(OBJECTS) 

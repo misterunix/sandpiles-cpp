@@ -30,11 +30,18 @@ class cGrid
         height = h;
         int size = width * height;
         grid = new int[size];
+
+        // zero out the grid
+        for (int i = 0; i < size; i++)
+        {
+            grid[i] = 0;
+        }
     }
 
     ~cGrid()
     {
         delete[] grid;
+        // cout << "cGrid destructor" << endl << flush;
     }
 
     int xy2i(int x, int y)
@@ -156,14 +163,13 @@ class Image
 void run(int width, int height, int initialGrains, int imgnum)
 {
     cout << "run " << width << " " << height << " " << initialGrains << " " << imgnum << endl << flush;
-    // int width = 1000;
-    // int height = 1000;
-    cGrid grid{width, height};
-    Image img{width, height};
+
+    cGrid grid{width, height}; // grid of grains
+    Image img{width, height};  // image of grains
 
     int mx = width / 2;
     int my = height / 2;
-    // int initialGrains = 1000000;
+
     grid.set(mx, my, initialGrains);
 
     bool changed = true;
@@ -179,7 +185,7 @@ void run(int width, int height, int initialGrains, int imgnum)
                 int v = grid.get(x, y);
                 if (v > 3)
                 {
-                    cout << ".";
+                    // cout << ".";
                     grid.set(x, y, v - 4);
                     grid.set(x + 1, y, grid.get(x + 1, y) + 1);
                     grid.set(x - 1, y, grid.get(x - 1, y) + 1);
@@ -208,7 +214,7 @@ int main(int argc, char **argv)
 
     // run(width, height, 64000, 0);
 
-    for (int i = 8; i < 32; i++)
+    for (int i = 16; i < 32; i++)
     {
         cout << "Starting " << i << " " << flush;
         time_t start = time(NULL);
