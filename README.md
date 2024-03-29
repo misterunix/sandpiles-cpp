@@ -33,3 +33,5 @@ Time: 186 seconds for 262144
 Starting 19 run 1024 1024 524288 19
 Time: 419 seconds for 524288
 Starting 20 run 1024 1024 1048576 20
+Time: 959 seconds for 1048576
+Starting 21 run 1024 1024 2097152 21
