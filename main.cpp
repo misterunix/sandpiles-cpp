@@ -17,13 +17,15 @@
 
 using namespace std;
 
+// class to hold a grid of integers
 class cGrid
 {
   public:
-    int width;
-    int height;
-    int *grid;
+    int width;  // width of the grid
+    int height; // height of the grid
+    int *grid;  // the grid
 
+    // constructor
     cGrid(int w, int h)
     {
         width = w;
@@ -38,17 +40,19 @@ class cGrid
         }
     }
 
+    // destructor
     ~cGrid()
     {
         delete[] grid;
-        // cout << "cGrid destructor" << endl << flush;
     }
 
+    // convert x,y to an index
     int xy2i(int x, int y)
     {
         return y * width + x;
     }
 
+    // set a value in the grid
     void set(int x, int y, int v)
     {
         if (x < 0 || x > width - 1 || y < 0 || y > height - 1)
@@ -56,6 +60,7 @@ class cGrid
         grid[xy2i(x, y)] = v;
     }
 
+    // get a value from the grid
     int get(int x, int y)
     {
         if (x < 0 || x > width - 1 || y < 0 || y > height - 1)
@@ -64,62 +69,76 @@ class cGrid
     }
 };
 
+// class to hold an image
 class Image
 {
   private:
-    gdImagePtr img;
-    int color[5];
+    gdImagePtr img; // the image
+    int color[5];   // the colors
 
   public:
-    int width;
-    int height;
-    // constructors
+    int width;  // width of the image
+    int height; // height of the image
+
+    // constructor
     Image()
     {
-        img = NULL;
-        width = 0;
-        height = 0;
+        img = NULL; // no image
+        width = 0;  // no width
+        height = 0; // no height
     }
 
+    // set the width and height of the image
     void setWidthHeight(int w, int h)
     {
         Image(w, h);
     }
 
+    // constructor with width and height
     Image(int w, int h)
     {
-        img = gdImageCreate(w, h);
+        img = gdImageCreate(w, h); // create the image
+
+        // check for no image
         if (img == NULL)
         {
             cout << "Cannot create image" << endl;
             return;
         }
-        initColors();
-        width = w;
-        height = h;
-        gdImageFilledRectangle(img, 0, 0, width, height, colors[0]);
+
+        initColors();                                                // initialize the colors
+        width = w;                                                   // set the width
+        height = h;                                                  // set the height
+        gdImageFilledRectangle(img, 0, 0, width, height, colors[0]); // fill the image with black
     }
 
     // destructor
     ~Image()
     {
-        gdImageDestroy(img);
+        gdImageDestroy(img); // destroy the image
     }
 
     // set a pixel to a color
     void setPixel(int x, int y, int cc)
     {
+        // check for out of bounds
         if (x < 0 || y < 0 || x > width - 1 || y > height - 1)
             return;
+
+        // check for out of bounds color
         if (cc < 0)
             cc = 0;
         if (cc > 4)
             cc = 4;
+
+        // check for no image
         if (img == NULL)
         {
             cout << "setPixel, img==NULL" << endl;
             return;
         }
+
+        // set the pixel
         gdImageSetPixel(img, x, y, colors[cc]);
     }
 
@@ -214,7 +233,7 @@ int main(int argc, char **argv)
 
     // run(width, height, 64000, 0);
 
-    for (int i = 16; i < 32; i++)
+    for (int i = 8; i < 32; i++)
     {
         cout << "Starting " << i << " " << flush;
         time_t start = time(NULL);
