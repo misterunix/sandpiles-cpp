@@ -22,14 +22,14 @@ class cGrid
   public:
     int width;
     int height;
-    unsigned int *grid;
+    int *grid;
 
     cGrid(int w, int h)
     {
         width = w;
         height = h;
         int size = width * height;
-        grid = new unsigned int[size];
+        grid = new int[size];
     }
 
     ~cGrid()
@@ -42,14 +42,14 @@ class cGrid
         return y * width + x;
     }
 
-    void set(int x, int y, unsigned int v)
+    void set(int x, int y, int v)
     {
         if (x < 0 || x > width - 1 || y < 0 || y > height - 1)
             return;
         grid[xy2i(x, y)] = v;
     }
 
-    unsigned int get(int x, int y)
+    int get(int x, int y)
     {
         if (x < 0 || x > width - 1 || y < 0 || y > height - 1)
             return 0;
@@ -102,6 +102,12 @@ class Image
     // set a pixel to a color
     void setPixel(int x, int y, int cc)
     {
+        if (x < 0 || y < 0 || x > width - 1 || y > height - 1)
+            return;
+        if (cc < 0)
+            cc = 0;
+        if (cc > 4)
+            cc = 4;
         if (img == NULL)
         {
             cout << "setPixel, img==NULL" << endl;
@@ -147,8 +153,9 @@ class Image
     }
 };
 
-void run(int width, int height, unsigned int initialGrains, int imgnum)
+void run(int width, int height, int initialGrains, int imgnum)
 {
+    cout << "run " << width << " " << height << " " << initialGrains << " " << imgnum << endl << flush;
     // int width = 1000;
     // int height = 1000;
     cGrid grid{width, height};
@@ -163,14 +170,16 @@ void run(int width, int height, unsigned int initialGrains, int imgnum)
 
     while (changed)
     {
+        // cout << ".";
         changed = false;
         for (int y = 0; y < height; y++)
         {
             for (int x = 0; x < width; x++)
             {
-                unsigned int v = grid.get(x, y);
-                if (v >= 4)
+                int v = grid.get(x, y);
+                if (v > 3)
                 {
+                    cout << ".";
                     grid.set(x, y, v - 4);
                     grid.set(x + 1, y, grid.get(x + 1, y) + 1);
                     grid.set(x - 1, y, grid.get(x - 1, y) + 1);
@@ -199,11 +208,11 @@ int main(int argc, char **argv)
 
     // run(width, height, 64000, 0);
 
-    for (int i = 17; i < 32; i++)
+    for (int i = 8; i < 32; i++)
     {
         cout << "Starting " << i << " " << flush;
         time_t start = time(NULL);
-        unsigned int ig = 1 << i;
+        int ig = 1 << i;
         run(width, height, ig, i);
         time_t end = time(NULL);
         cout << "Time: " << end - start << " seconds"
