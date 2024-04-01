@@ -17,6 +17,12 @@
 
 using namespace std;
 
+struct box
+{
+    int w;
+    int h;
+};
+
 // class to hold a grid of integers
 class cGrid
 {
@@ -25,11 +31,21 @@ class cGrid
     int height; // height of the grid
     int *grid;  // the grid
 
+    int bMinX; // bounding box min x
+    int bMinY; // bounding box min y
+    int bMaxX; // bounding box max x
+    int bMaxY; // bounding box max y
+
     // constructor
     cGrid(int w, int h)
     {
         width = w;
         height = h;
+        bMinX = 0;
+        bMinY = 0;
+        bMaxX = width;
+        bMaxY = height;
+
         int size = width * height;
         grid = new int[size];
 
@@ -67,6 +83,44 @@ class cGrid
             return 0;
         return grid[xy2i(x, y)];
     }
+
+    void resize(int x, int y)
+    {
+
+        int diffX = x - width;
+        int diffY = y - height;
+
+        int *newgrid = new int[x * y];
+        for (int i = 0; i < x * y; i++)
+        {
+            newgrid[i] = 0;
+        }
+        for (int i = 0; i < width; i++)
+        {
+            int ii = i + diffX / 2;
+            for (int j = 0; j < height; j++)
+            {
+                int jj = j + diffY / 2;
+                newgrid[jj * x + ii] = grid[j * width + i];
+            }
+        }
+        delete[] grid;
+        grid = newgrid;
+        width = x;
+        height = y;
+    }
+
+    // get the new width
+    int getWidth()
+    {
+        return width;
+    }
+
+    // get the new height
+    int getHeight()
+    {
+        return height;
+    }
 };
 
 // class to hold an image
@@ -79,6 +133,7 @@ class Image
   public:
     int width;  // width of the image
     int height; // height of the image
+    string imgFileName;
 
     // constructor
     Image()
@@ -147,6 +202,8 @@ class Image
     {
         string fn = "img/sandpile-" + to_string(width) + "-" + to_string(height) + "-" + to_string(grains) + "-" +
                     to_string(i) + ".jpg";
+        imgFileName = fn;
+
         FILE *fp;
         fp = fopen(fn.c_str(), "wb");
         if (fp == NULL)
@@ -157,6 +214,12 @@ class Image
         gdImageJpeg(img, fp, 100);
         fclose(fp);
         return true;
+    }
+
+    // get the image file name
+    string getImgFileName()
+    {
+        return imgFileName;
     }
 
   protected:
@@ -179,12 +242,12 @@ class Image
     }
 };
 
-void run(int width, int height, int initialGrains, int imgnum)
+box run(int width, int height, int initialGrains, int imgnum)
 {
     cout << "run " << width << " " << height << " " << initialGrains << " " << imgnum << endl << flush;
 
     cGrid grid{width, height}; // grid of grains
-    Image img{width, height};  // image of grains
+    // Image img{width, height};  // image of grains
 
     int mx = width / 2;
     int my = height / 2;
@@ -195,6 +258,9 @@ void run(int width, int height, int initialGrains, int imgnum)
 
     while (changed)
     {
+
+        bool sizechanged = false;
+
         // cout << ".";
         changed = false;
         for (int y = 0; y < height; y++)
@@ -206,15 +272,57 @@ void run(int width, int height, int initialGrains, int imgnum)
                 {
                     // cout << ".";
                     grid.set(x, y, v - 4);
-                    grid.set(x + 1, y, grid.get(x + 1, y) + 1);
-                    grid.set(x - 1, y, grid.get(x - 1, y) + 1);
-                    grid.set(x, y + 1, grid.get(x, y + 1) + 1);
-                    grid.set(x, y - 1, grid.get(x, y - 1) + 1);
+
+                    int tx1a = x + 1;
+                    int tx1b = grid.get(tx1a, y) + 1;
+                    if (tx1a >= width - 10)
+                    {
+                        width = tx1a + 10;
+                        sizechanged = true;
+                    }
+                    grid.set(tx1a, y, tx1b);
+
+                    tx1a = x - 1;
+                    tx1b = grid.get(tx1a, y) + 1;
+                    if (tx1a < 10)
+                    {
+                        width = width + 10;
+                        sizechanged = true;
+                    }
+                    grid.set(x - 1, y, tx1b);
+
+                    int ty1a = y + 1;
+                    int ty1b = grid.get(x, ty1a) + 1;
+                    if (ty1a >= height - 10)
+                    {
+                        height = ty1a + 10;
+                        sizechanged = true;
+                    }
+                    grid.set(x, y + 1, ty1b);
+
+                    ty1a = y - 1;
+                    ty1b = grid.get(x, ty1a) + 1;
+                    if (ty1a < 10)
+                    {
+                        height = height + 10;
+                        sizechanged = true;
+                    }
+                    grid.set(x, y - 1, ty1b);
+
+                    if (sizechanged)
+                    {
+                        grid.resize(width, height);
+                    }
+
                     changed = true;
                 }
             }
         }
     }
+
+    box b = {width, height};
+
+    Image img{width, height}; // image of grains
     for (int y = 0; y < height; y++)
     {
         for (int x = 0; x < width; x++)
@@ -223,25 +331,69 @@ void run(int width, int height, int initialGrains, int imgnum)
         }
     }
     img.saveImage(imgnum, initialGrains);
+    return b;
+}
+
+string ConvertSectoDay(int n)
+{
+    string result;
+
+    int day = n / (24 * 3600);
+
+    n = n % (24 * 3600);
+    int hour = n / 3600;
+
+    n %= 3600;
+    int minutes = n / 60;
+
+    n %= 60;
+    int seconds = n;
+
+    result = to_string(day) + ":" + to_string(hour) + ":" + to_string(minutes) + ":" + to_string(seconds);
+    // cout << day << " " << "days " << hour
+    //      << " " << "hours " << minutes << " "
+    //      << "minutes " << seconds << " "
+    //      << "seconds "  << endl;
+    return result;
 }
 
 int main(int argc, char **argv)
 {
 
-    int width = 1024;
-    int height = 1024;
+    int width = 50;
+    int height = 50;
+    box b = {width, height};
 
     // run(width, height, 64000, 0);
 
     for (int i = 8; i < 32; i++)
     {
         cout << "Starting " << i << " " << flush;
+
         time_t start = time(NULL);
         int ig = 1 << i;
-        run(width, height, ig, i);
+
+        b = run(width, height, ig, i);
+        width = b.w;
+        height = b.h;
+
         time_t end = time(NULL);
+        float et = difftime(end, start);
+
         cout << "Time: " << end - start << " seconds"
              << " for " << ig << endl
              << flush;
+
+        string fn;
+        fn = "relative_test.md";
+        ofstream ofile(fn, ios::app);
+        if (!ofile)
+        {
+            cerr << "Cannot open file " << fn << endl;
+            return 1;
+        }
+
+        ofile << "|" << i << "|" << ig << "|" << ConvertSectoDay(int(et)) << "|" << width << "x" << height << "|  "
+              << endl;
     }
 }

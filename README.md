@@ -6,8 +6,37 @@ Im still not satisfied with the speed, so I keep making versions and testing the
 
 Someday I intend to document my results. 
 
+Dynamically resizing the array to allow it to expand, keeping a 10-pixel border around the sandpile.
 
 
+
+Starting 8 run 50 50 256 8  
+Time: 0 seconds for 256  
+Starting 9 run 50 50 512 9  
+Time: 0 seconds for 512  
+Starting 10 run 50 50 1024 10  
+Time: 0 seconds for 1024  
+Starting 11 run 50 50 2048 11  
+Time: 0 seconds for 2048  
+Starting 12 run 50 50 4096 12  
+Time: 0 seconds for 4096  
+Starting 13 run 50 50 8192 13  
+Time: 0 seconds for 8192  
+Starting 14 run 50 50 16384 14  
+Time: 0 seconds for 16384  
+Starting 15 run 50 50 32768 15  
+Time: 2 seconds for 32768  
+Starting 16 run 50 50 65536 16  
+Time: 10 seconds for 65536  
+Starting 17 run 50 50 131072 17  
+Time: 88 seconds for 131072
+Starting 18 run 50 50 262144 18
+
+
+
+
+
+## Old times on devmachine
 Starting 8 run 1024 1024 256 8   
 Time: 0 seconds for 256  
 Starting 9 run 1024 1024 512 9  
