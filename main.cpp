@@ -244,7 +244,11 @@ class Image
 
 box run(int width, int height, int initialGrains, int imgnum)
 {
-    cout << "run " << width << " " << height << " " << initialGrains << " " << imgnum << endl << flush;
+    // cout << "run " << width << " " << height << " " << initialGrains << " " << imgnum << endl << flush;
+
+    int border = 10;
+    int bodergap = 50;
+    uint8_t twirly = 0;
 
     cGrid grid{width, height}; // grid of grains
     // Image img{width, height};  // image of grains
@@ -258,6 +262,7 @@ box run(int width, int height, int initialGrains, int imgnum)
 
     while (changed)
     {
+        // cout << "." << flush;
 
         bool sizechanged = false;
 
@@ -275,42 +280,64 @@ box run(int width, int height, int initialGrains, int imgnum)
 
                     int tx1a = x + 1;
                     int tx1b = grid.get(tx1a, y) + 1;
-                    if (tx1a >= width - 10)
+                    if (tx1a >= width - border)
                     {
-                        width = tx1a + 10;
+                        width = tx1a + bodergap;
                         sizechanged = true;
                     }
                     grid.set(tx1a, y, tx1b);
 
                     tx1a = x - 1;
                     tx1b = grid.get(tx1a, y) + 1;
-                    if (tx1a < 10)
+                    if (tx1a < border)
                     {
-                        width = width + 10;
+                        width = width + bodergap;
                         sizechanged = true;
                     }
                     grid.set(x - 1, y, tx1b);
 
                     int ty1a = y + 1;
                     int ty1b = grid.get(x, ty1a) + 1;
-                    if (ty1a >= height - 10)
+                    if (ty1a >= height - border)
                     {
-                        height = ty1a + 10;
+                        height = ty1a + bodergap;
                         sizechanged = true;
                     }
                     grid.set(x, y + 1, ty1b);
 
                     ty1a = y - 1;
                     ty1b = grid.get(x, ty1a) + 1;
-                    if (ty1a < 10)
+                    if (ty1a < border)
                     {
-                        height = height + 10;
+                        height = height + bodergap;
                         sizechanged = true;
                     }
                     grid.set(x, y - 1, ty1b);
 
+                    // if the size has changed, resize the grid
                     if (sizechanged)
                     {
+
+                        switch (twirly)
+                        {
+                        case 0:
+                            cout << "|\r" << flush;
+                            twirly++;
+                            break;
+                        case 1:
+                            cout << "/\r" << flush;
+                            twirly++;
+                            break;
+                        case 2:
+                            cout << "-\r" << flush;
+                            twirly++;
+                            break;
+                        case 3:
+                            cout << "\\\r" << flush;
+                            twirly = 0;
+                            break;
+                        }
+
                         grid.resize(width, height);
                     }
 
@@ -368,7 +395,7 @@ int main(int argc, char **argv)
 
     for (int i = 8; i < 32; i++)
     {
-        cout << "Starting " << i << " " << flush;
+        // cout << "Starting " << i << " " << flush;
 
         time_t start = time(NULL);
         int ig = 1 << i;
@@ -380,9 +407,9 @@ int main(int argc, char **argv)
         time_t end = time(NULL);
         float et = difftime(end, start);
 
-        cout << "Time: " << end - start << " seconds"
-             << " for " << ig << endl
-             << flush;
+        // cout << "Time: " << end - start << " seconds"
+        //      << " for " << ig << endl
+        //      << flush;
 
         string fn;
         fn = "relative_test.md";
@@ -395,5 +422,8 @@ int main(int argc, char **argv)
 
         ofile << "|" << i << "|" << ig << "|" << ConvertSectoDay(int(et)) << "|" << width << "x" << height << "|  "
               << endl;
+
+        ofile.close();
     }
+    cout << endl;
 }
