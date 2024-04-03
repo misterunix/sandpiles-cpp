@@ -24,3 +24,5 @@ binary: $(OBJECTS)
 clean:
 	rm $(OBJECTS) 
 	rm bin/*
+	rm img/*.jpg
+	
