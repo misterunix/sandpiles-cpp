@@ -63,13 +63,13 @@ class cGrid
     }
 
     // convert x,y to an index
-    int xy2i(int x, int y)
+    inline int xy2i(int x, int y)
     {
         return y * width + x;
     }
 
     // set a value in the grid
-    void set(int x, int y, int v)
+    inline void set(int x, int y, int v)
     {
         if (x < 0 || x > width - 1 || y < 0 || y > height - 1)
             return;
@@ -77,14 +77,14 @@ class cGrid
     }
 
     // get a value from the grid
-    int get(int x, int y)
+    inline int get(int x, int y)
     {
         if (x < 0 || x > width - 1 || y < 0 || y > height - 1)
             return 0;
         return grid[xy2i(x, y)];
     }
 
-    void resize(int x, int y)
+    inline void resize(int x, int y)
     {
 
         int diffX = x - width;
@@ -174,7 +174,7 @@ class Image
     }
 
     // set a pixel to a color
-    void setPixel(int x, int y, int cc)
+    inline void setPixel(int x, int y, int cc)
     {
         // check for out of bounds
         if (x < 0 || y < 0 || x > width - 1 || y > height - 1)
@@ -242,12 +242,12 @@ class Image
     }
 };
 
-box run(int width, int height, int initialGrains, int imgnum)
+inline box run(int width, int height, int initialGrains, int imgnum)
 {
     // cout << "run " << width << " " << height << " " << initialGrains << " " << imgnum << endl << flush;
 
     int border = 10;
-    int bodergap = 50;
+    // int bodergap = 50;
     uint8_t twirly = 0;
 
     cGrid grid{width, height}; // grid of grains
@@ -259,15 +259,26 @@ box run(int width, int height, int initialGrains, int imgnum)
     grid.set(mx, my, initialGrains);
 
     bool changed = true;
-
+    int mw = width;
+    int mh = height;
+    bool sizechanged = false;
     while (changed)
     {
         // cout << "." << flush;
 
-        bool sizechanged = false;
+        if (sizechanged)
+        {
+            width = mw;
+            height = mh;
+            sizechanged = false;
+        }
 
         // cout << ".";
         changed = false;
+
+        int oldmw = mw;
+        int oldmh = mh;
+
         for (int y = 0; y < height; y++)
         {
             for (int x = 0; x < width; x++)
@@ -278,11 +289,23 @@ box run(int width, int height, int initialGrains, int imgnum)
                     // cout << ".";
                     grid.set(x, y, v - 4);
 
+                    int bgw = 50;
+                    int bgh = 50;
+
+                    /*
+
+
+
+
+                    */
+
                     int tx1a = x + 1;
                     int tx1b = grid.get(tx1a, y) + 1;
                     if (tx1a >= width - border)
                     {
-                        width = tx1a + bodergap;
+                        // width = tx1a + bodergap;
+                        // width = tx1a + (width+(width/2));
+
                         sizechanged = true;
                     }
                     grid.set(tx1a, y, tx1b);
@@ -291,7 +314,7 @@ box run(int width, int height, int initialGrains, int imgnum)
                     tx1b = grid.get(tx1a, y) + 1;
                     if (tx1a < border)
                     {
-                        width = width + bodergap;
+
                         sizechanged = true;
                     }
                     grid.set(x - 1, y, tx1b);
@@ -300,7 +323,8 @@ box run(int width, int height, int initialGrains, int imgnum)
                     int ty1b = grid.get(x, ty1a) + 1;
                     if (ty1a >= height - border)
                     {
-                        height = ty1a + bodergap;
+                        // height = ty1a + bodergap;
+
                         sizechanged = true;
                     }
                     grid.set(x, y + 1, ty1b);
@@ -309,36 +333,55 @@ box run(int width, int height, int initialGrains, int imgnum)
                     ty1b = grid.get(x, ty1a) + 1;
                     if (ty1a < border)
                     {
-                        height = height + bodergap;
+
                         sizechanged = true;
                     }
                     grid.set(x, y - 1, ty1b);
 
+                    /*
+
+
+
+
+                    */
+
                     // if the size has changed, resize the grid
                     if (sizechanged)
                     {
+                        mw = width + bgw;
+                        mh = height + bgh;
+                        if (oldmw == mw && oldmh == mh)
+                        {
+                            continue;
+                        }
+                        oldmw = mw;
+                        oldmh = mh;
+
+                        // sizechanged = false;
 
                         switch (twirly)
                         {
                         case 0:
-                            cout << "|\r" << flush;
+                            cout << "|\t" << flush;
                             twirly++;
                             break;
                         case 1:
-                            cout << "/\r" << flush;
+                            cout << "/\t" << flush;
                             twirly++;
                             break;
                         case 2:
-                            cout << "-\r" << flush;
+                            cout << "-\t" << flush;
                             twirly++;
                             break;
                         case 3:
-                            cout << "\\\r" << flush;
+                            cout << "\\\t" << flush;
                             twirly = 0;
                             break;
                         }
 
-                        grid.resize(width, height);
+                        cout << "Resizing " << width << "x" << height << " to " << mw << "x" << mh << "\r" << flush;
+
+                        grid.resize(mw, mh);
                     }
 
                     changed = true;
@@ -361,28 +404,41 @@ box run(int width, int height, int initialGrains, int imgnum)
     return b;
 }
 
-string ConvertSectoDay(int n)
+inline string to_string_leading(int i)
+{
+    string t = to_string(i); // convert to string
+    if (t.length() == 1)     // if only one digit
+    {
+        t = "0" + t; // add a leading zero
+    }
+    return t;
+}
+
+inline string ConvertSectoDay(int n)
 {
     string result;
 
-    int day = n / (24 * 3600);
-
+    int day = n / (24 * 3600); // get days from seconds
     n = n % (24 * 3600);
-    int hour = n / 3600;
+    string d = to_string(day); // days
+
+    int hour = n / 3600;                // get hours from remaining seconds
+    string h = to_string_leading(hour); // hours
 
     n %= 3600;
-    int minutes = n / 60;
+    int minutes = n / 60;                  // get minutes from remaining seconds
+    string m = to_string_leading(minutes); // minutes
 
     n %= 60;
-    int seconds = n;
+    int seconds = n;                       // get remaining seconds
+    string s = to_string_leading(seconds); // seconds
 
-    result = to_string(day) + ":" + to_string(hour) + ":" + to_string(minutes) + ":" + to_string(seconds);
-    // cout << day << " " << "days " << hour
-    //      << " " << "hours " << minutes << " "
-    //      << "minutes " << seconds << " "
-    //      << "seconds "  << endl;
+    result = d + ":" + h + ":" + m + ":" + s;
+
     return result;
 }
+
+// convert an integer to a string with a leading zero if needed
 
 int main(int argc, char **argv)
 {
