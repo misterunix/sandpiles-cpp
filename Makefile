@@ -5,7 +5,7 @@ CFLAGS += -Wall -Wextra -Wpedantic \
           -Wwrite-strings -Wredundant-decls -Wmissing-include-dirs
 CFLAGS += -O2
 LDFLAGS = -L/usr/local/lib/ -L/usr/lib/x86_64-linux-gnu/ -lgd -lm 
-OBJECTS = main.o 
+OBJECTS = main.o cImage.o cGrid.o
 
 # GCC warnings that Clang doesn't provide:
 ifeq ($(CC),gcc)
@@ -18,11 +18,17 @@ all: binary
 main.o : main.cpp
 	$(CC) $(CFLAGS) -c main.cpp -o main.o
 
+cImage.o : cImage.cpp
+	$(CC) $(CFLAGS) -c cImage.cpp -o cImage.o
+
+cGrid.o : cGrid.cpp
+	$(CC) $(CFLAGS) -c cGrid.cpp -o cGrid.o
+
 binary: $(OBJECTS)
 	$(CC) $(CFLAGS) $(OBJECTS) -o bin/sandpiles-cpp $(LDFLAGS)
 
 clean:
 	rm $(OBJECTS) 
 	rm bin/*
-	rm img/*.jpg
+	
 	
