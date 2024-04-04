@@ -17,7 +17,7 @@ static libraries need
 
 # Formatting style
 class names are prefixed with `c` using camel case.  
-class member variables are prefixed with `_m`.  
-function parameters are prefixed with `_t`.   
+class member variables are prefixed with `m_`.  
+function parameters are prefixed with `t_`.   
 
 common sense says to inline all functions that can be for performance reasons.  
