@@ -233,7 +233,7 @@ int main(int argc, char **argv)
 
     // run(width, height, 64000, 0);
 
-    for (int i = 8; i < 16; i++)
+    for (int i = 8; i < 21; i++)
     {
         // cout << "Starting " << i << " " << flush;
 
