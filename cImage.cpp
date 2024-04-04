@@ -43,7 +43,7 @@ void cImage::setWidthHeight(int t_w, int t_h)
 // save the image to a file
 bool cImage::saveImage(int t_i, int t_grains)
 {
-    std::string fn = "img1/sandpile-" + std::to_string(m_width) + "-" + std::to_string(m_height) + "-" +
+    std::string fn = "img/sandpile-" + std::to_string(m_width) + "-" + std::to_string(m_height) + "-" +
                      std::to_string(t_grains) + "-" + std::to_string(t_i) + ".jpg";
     m_imgFileName = fn;
 

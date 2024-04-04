@@ -31,7 +31,7 @@ inline box run(int t_width, int t_height, int t_initialGrains, int t_imgnum)
 {
     // cout << "run " << width << " " << height << " " << initialGrains << " " << imgnum << endl << flush;
 
-    int border = 10;
+    int border = 16;
     // int bodergap = 50;
     uint8_t twirly = 0;
 
@@ -74,8 +74,8 @@ inline box run(int t_width, int t_height, int t_initialGrains, int t_imgnum)
                     // cout << ".";
                     grid.set(x, y, v - 4);
 
-                    int bgw = 50;
-                    int bgh = 50;
+                    int bgw = 64;
+                    int bgh = 64;
 
                     /*
 
@@ -227,8 +227,8 @@ inline string ConvertSectoDay(int t_n)
 int main(int argc, char **argv)
 {
 
-    int width = 50;
-    int height = 50;
+    int width = 64;
+    int height = 64;
     box b = {width, height};
 
     // run(width, height, 64000, 0);
@@ -252,7 +252,7 @@ int main(int argc, char **argv)
         //      << flush;
 
         string fn;
-        fn = "relative_test-test.md";
+        fn = "relative_test.md";
         ofstream ofile(fn, ios::app);
         if (!ofile)
         {
