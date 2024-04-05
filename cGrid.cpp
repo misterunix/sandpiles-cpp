@@ -1,6 +1,11 @@
 #include "cGrid.hh"
 
-// constructor
+/**
+ * @brief Construct a new cGrid::cGrid object
+ *
+ * @param t_w width of the grid
+ * @param t_h height of the grid
+ */
 cGrid::cGrid(int t_w, int t_h)
 {
     m_width = t_w;
@@ -20,19 +25,30 @@ cGrid::cGrid(int t_w, int t_h)
     }
 }
 
-// destructor
+/**
+ * @brief Destroy the cGrid::cGrid object
+ *
+ */
 cGrid::~cGrid()
 {
     delete[] m_grid;
 }
 
-// get the new width
+/**
+ * @brief get the current width of the grid
+ *
+ * @return int
+ */
 int cGrid::getWidth()
 {
     return m_width;
 }
 
-// get the new height
+/**
+ * @brief get the current height of the grid
+ *
+ * @return int
+ */
 int cGrid::getHeight()
 {
     return m_height;

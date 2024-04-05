@@ -2,4 +2,4 @@ bin/*
 !bin/*.md
 *.o
 html/*
-*.doxy
+

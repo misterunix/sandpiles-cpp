@@ -16,17 +16,31 @@
 #include <gdfontt.h>
 #include <gdfx.h>
 
+#include "cArgs.hh"
 #include "cGrid.hh"
 #include "cImage.hh"
 
 using namespace std;
 
+/**
+ * @brief struct to hold multiple values for function run to return
+ *
+ */
 struct box
 {
     int w;
     int h;
 };
 
+/**
+ * @brief create he grid and run the simulation, saving the image
+ *
+ * @param t_width width of the grid
+ * @param t_height height of the grid
+ * @param t_initialGrains number of grains to start with
+ * @param t_imgnum image number to save
+ * @return box
+ */
 inline box run(int t_width, int t_height, int t_initialGrains, int t_imgnum)
 {
     // cout << "run " << width << " " << height << " " << initialGrains << " " << imgnum << endl << flush;
@@ -188,6 +202,12 @@ inline box run(int t_width, int t_height, int t_initialGrains, int t_imgnum)
     return b;
 }
 
+/**
+ * @brief convert an integer to a string with a leading zero if needed
+ *
+ * @param t_i integer to convert
+ * @return string result
+ */
 inline string to_string_leading(int t_i)
 {
     string t = to_string(t_i); // convert to string
@@ -198,6 +218,12 @@ inline string to_string_leading(int t_i)
     return t;
 }
 
+/**
+ * @brief Convert seconds to days, hours, minutes, and seconds
+ *
+ * @param t_n number of seconds
+ * @return string result
+ */
 inline string ConvertSectoDay(int t_n)
 {
     string result;
@@ -222,18 +248,34 @@ inline string ConvertSectoDay(int t_n)
     return result;
 }
 
-// convert an integer to a string with a leading zero if needed
+/**
+ * @brief main function
+ *
+ * @param argc
+ * @param argv
+ * @return int
+ */
 
 int main(int argc, char **argv)
 {
 
-    int width = 64;
-    int height = 64;
+    cArgs args{argc, argv};
+    args.ParseFlags();
+
+    int startBits = args.m_bits;
+    int endBits = 32;
+
+    int width = args.m_width;
+    int height = args.m_height;
+
     box b = {width, height};
 
-    // run(width, height, 64000, 0);
+    cout << "Starting " << startBits << " bits" << endl << flush;
+    cout << "Starting " << endBits << " bits" << endl << flush;
+    cout << "Starting " << width << " width" << endl << flush;
+    cout << "Starting " << height << " height" << endl << flush;
 
-    for (int i = 8; i < 21; i++)
+    for (int i = startBits; i <= endBits; i++)
     {
         // cout << "Starting " << i << " " << flush;
 

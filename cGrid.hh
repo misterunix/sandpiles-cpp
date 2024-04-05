@@ -12,7 +12,10 @@
 
 #include "cImage.hh"
 
-// class to hold a grid of integers
+/**
+ * @brief class to hold and modify the grid
+ *
+ */
 class cGrid
 {
   public:
@@ -28,11 +31,25 @@ class cGrid
     cGrid(int t_w, int t_h);
     ~cGrid();
 
+    /**
+     * @brief convert x,y to index
+     *
+     * @param t_x
+     * @param t_y
+     * @return int
+     */
     inline int xy2i(int t_x, int t_y)
     {
         return t_y * m_width + t_x;
     }
 
+    /**
+     * @brief set the value v at x,y
+     *
+     * @param t_x
+     * @param t_y
+     * @param t_v
+     */
     inline void set(int t_x, int t_y, int t_v)
     {
         if (t_x < 0 || t_x > m_width - 1 || t_y < 0 || t_y > m_height - 1)
@@ -40,6 +57,13 @@ class cGrid
         m_grid[xy2i(t_x, t_y)] = t_v;
     }
 
+    /**
+     * @brief get the value at x,y
+     *
+     * @param t_x
+     * @param t_y
+     * @return int
+     */
     inline int get(int t_x, int t_y)
     {
         if (t_x < 0 || t_x > m_width - 1 || t_y < 0 || t_y > m_height - 1)
@@ -47,6 +71,12 @@ class cGrid
         return m_grid[xy2i(t_x, t_y)];
     }
 
+    /**
+     * @brief resize the current grid
+     *
+     * @param t_x new width
+     * @param t_y new height
+     */
     inline void resize(int t_x, int t_y)
     {
 

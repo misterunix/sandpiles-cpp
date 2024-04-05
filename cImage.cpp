@@ -2,7 +2,10 @@
 
 // class to hold an image
 
-// constructor
+/**
+ * @brief Construct a new cImage::cImage object
+ *
+ */
 cImage::cImage()
 {
     m_img = NULL; // no image
@@ -10,7 +13,12 @@ cImage::cImage()
     m_height = 0; // no height
 }
 
-// constructor with width and height
+/**
+ * @brief Construct a new cImage::cImage object with width and height
+ *
+ * @param t_w width of the image
+ * @param t_h height of the image
+ */
 cImage::cImage(int t_w, int t_h)
 {
     m_img = gdImageCreate(t_w, t_h); // create the image
@@ -28,19 +36,34 @@ cImage::cImage(int t_w, int t_h)
     gdImageFilledRectangle(m_img, 0, 0, m_width, m_height, m_colors[0]); // fill the image with black
 }
 
-// destructor
+/**
+ * @brief Destroy the cImage::cImage object
+ *
+ */
 cImage::~cImage()
 {
     gdImageDestroy(m_img); // destroy the image
 }
 
-// set the width and height of the image
+/**
+ * @brief set the width and height of the image
+ *
+ * @param t_w width of the image
+ * @param t_h height of the image
+ */
 void cImage::setWidthHeight(int t_w, int t_h)
 {
     cImage(t_w, t_h);
 }
 
-// save the image to a file
+/**
+ * @brief save the current image as a jpeg to a file
+ *
+ * @param t_i index of the image
+ * @param t_grains number of grains
+ * @return true if successful
+ * @return false if not successful
+ */
 bool cImage::saveImage(int t_i, int t_grains)
 {
     std::string fn = "img/sandpile-" + std::to_string(m_width) + "-" + std::to_string(m_height) + "-" +
@@ -59,13 +82,20 @@ bool cImage::saveImage(int t_i, int t_grains)
     return true;
 }
 
-// get the image file name
+/**
+ * @brief helper function to get the image file name
+ *
+ * @return std::string
+ */
 std::string cImage::getImgFileName()
 {
     return m_imgFileName;
 }
 
-// initialize the colors
+/**
+ * @brief helper function to initialize the colors
+ *
+ */
 void cImage::initColors()
 {
     if (m_img == NULL)

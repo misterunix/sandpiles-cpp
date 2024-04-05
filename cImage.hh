@@ -18,6 +18,10 @@
 #include <gdfontt.h>
 #include <gdfx.h>
 
+/**
+ * @brief class to hold and modify the image
+ *
+ */
 class cImage
 {
   private:
@@ -39,6 +43,13 @@ class cImage
     bool saveImage(int t_i, int t_grains);
     std::string getImgFileName();
 
+    /**
+     * @brief Set the Pixel at x,y to color t_cc
+     *
+     * @param t_x
+     * @param t_y
+     * @param t_cc value 0-4
+     */
     inline void setPixel(int t_x, int t_y, int t_cc)
     {
         // check for out of bounds
