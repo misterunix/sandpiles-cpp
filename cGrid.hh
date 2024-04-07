@@ -21,6 +21,7 @@ class cGrid
   public:
     int m_width;  // width of the grid
     int m_height; // height of the grid
+    int m_bits;   // bits shifted for the grid. Only used for save point.
     int *m_grid;  // the grid
 
     int m_bMinX; // bounding box min x
@@ -28,7 +29,7 @@ class cGrid
     int m_bMaxX; // bounding box max x
     int m_bMaxY; // bounding box max y
 
-    cGrid(int t_w, int t_h);
+    cGrid(int t_w, int t_h, int t_bits);
     ~cGrid();
 
     /**
@@ -105,4 +106,10 @@ class cGrid
 
     int getWidth();
     int getHeight();
+
+    /**
+     * @brief Save the grid to a file to be able to save the current state
+     *
+     */
+    void SaveGrid(void);
 };

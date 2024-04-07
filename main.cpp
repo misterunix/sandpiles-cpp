@@ -91,12 +91,9 @@ inline box run(int t_width, int t_height, int t_initialGrains, int t_imgnum)
                     int bgw = 64;
                     int bgh = 64;
 
-                    /*
-
-
-
-
-                    */
+                    ///
+                    ///
+                    ///
 
                     int tx1a = x + 1;
                     int tx1b = grid.get(tx1a, y) + 1;
@@ -136,12 +133,9 @@ inline box run(int t_width, int t_height, int t_initialGrains, int t_imgnum)
                     }
                     grid.set(x, y - 1, ty1b);
 
-                    /*
-
-
-
-
-                    */
+                    ///
+                    ///
+                    ///
 
                     // if the size has changed, resize the grid
                     if (sizechanged)
