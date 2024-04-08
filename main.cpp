@@ -49,7 +49,7 @@ inline box run(int t_width, int t_height, int t_initialGrains, int t_imgnum)
     // int bodergap = 50;
     uint8_t twirly = 0;
 
-    cGrid grid{t_width, t_height}; // grid of grains
+    cGrid grid{t_width, t_height, t_imgnum}; // grid of grains
     // Image img{width, height};  // image of grains
 
     int mx = t_width / 2;
