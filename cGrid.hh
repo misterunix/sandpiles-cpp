@@ -102,6 +102,7 @@ class cGrid
         m_grid = newgrid;
         m_width = t_x;
         m_height = t_y;
+        SaveGrid();
     }
 
     int getWidth();
@@ -112,4 +113,5 @@ class cGrid
      *
      */
     void SaveGrid(void);
+    void LoadGrid(void);
 };

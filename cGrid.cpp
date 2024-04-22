@@ -63,10 +63,47 @@ void cGrid::SaveGrid(void)
 {
 
     std::fstream file;
-    file.open("grid.bin", std::ios::app | std::ios::binary);
-    file.write(reinterpret_cast<char *>(&m_width), sizeof(m_width));
-    file.write(reinterpret_cast<char *>(&m_height), sizeof(m_height));
-    file.write(reinterpret_cast<char *>(&m_bits), sizeof(m_bits));
-    file.write(reinterpret_cast<char *>(&m_grid), sizeof(m_grid));
+    file.open("grid.sav", std::ios::app);
+    if (!file)
+    {
+        std::cerr << "Cannot open file grid.sav" << std::endl;
+        return;
+    }
+    file << m_width << "\n";
+    file << m_height << "\n";
+    file << m_bits << "\n";
+
+    for (int i = 0; i < m_width * m_height; i++)
+    {
+        file << m_grid[i] << " ";
+    }
+    file << "\n";
+    file.close();
+}
+
+/**
+ * @brief Load the grid from a file to be able to restore the current state
+ *
+ */
+void cGrid::LoadGrid(void)
+{
+    std::fstream file;
+    file.open("grid.sav", std::ios::in);
+    if (!file)
+    {
+        std::cerr << "Cannot open file grid.sav" << std::endl;
+        return;
+    }
+    file >> m_width;
+    file >> m_height;
+    file >> m_bits;
+
+    delete[] m_grid;
+    m_grid = new int[m_width * m_height];
+
+    for (int i = 0; i < m_width * m_height; i++)
+    {
+        file >> m_grid[i];
+    }
     file.close();
 }
